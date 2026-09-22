@@ -1,0 +1,110 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-ivory: #f7f3ed;
+    --color-mist: #e8ece9;
+    --color-forest: #2d4a3e;
+    --color-charcoal: #2c2c2c;
+    --color-gold: #c4a265;
+    --color-terracotta: #b85c38;
+    --font-serif: 'Playfair Display', Georgia, serif;
+    --font-sans: 'DM Sans', system-ui, sans-serif;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  body {
+    @apply bg-ivory font-sans text-charcoal antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-serif;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-forest;
+  }
+
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+}
+
+@layer components {
+  .skip-link {
+    @apply fixed left-4 top-4 z-[100] -translate-y-20 rounded-lg bg-forest px-4 py-2 text-sm font-medium text-ivory shadow-lg transition-transform focus:translate-y-0 focus-visible:translate-y-0;
+  }
+  .section-padding {
+    @apply px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24;
+  }
+
+  .container-narrow {
+    @apply mx-auto max-w-7xl;
+  }
+
+  .heading-display {
+    @apply font-serif text-4xl font-semibold tracking-tight text-charcoal sm:text-5xl lg:text-6xl;
+  }
+
+  .heading-section {
+    @apply font-serif text-3xl font-semibold tracking-tight text-charcoal sm:text-4xl;
+  }
+
+  .text-body {
+    @apply text-base leading-relaxed text-charcoal-600;
+  }
+
+  .wave-divider {
+    @apply relative;
+  }
+
+  .wave-divider::after {
+    content: '';
+    @apply absolute bottom-0 left-0 right-0 h-12 bg-ivory;
+    clip-path: ellipse(55% 100% at 50% 100%);
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Leaflet — free OpenStreetMap tiles */
+.leaflet-container {
+  font-family: var(--font-sans);
+  background: #e8ece9;
+  height: 100%;
+  width: 100%;
+  min-height: 12rem;
+}
+
+.nugawela-map-pin {
+  background: transparent !important;
+  border: none !important;
+}

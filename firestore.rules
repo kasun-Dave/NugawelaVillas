@@ -1,0 +1,86 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn() &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'resort_admin';
+    }
+
+    match /meta/{docId} {
+      allow read: if true;
+      allow write: if isSignedIn();
+    }
+
+    match /rooms/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /destinations/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /experiences/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /testimonials/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /users/{userId} {
+      allow read: if isSignedIn() && (request.auth.uid == userId || isAdmin());
+      allow create: if isSignedIn() && request.auth.uid == userId;
+      allow update: if isSignedIn() && (request.auth.uid == userId || isAdmin());
+    }
+
+    match /guest_profiles/{userId} {
+      allow read, write: if isSignedIn() && request.auth.uid == userId;
+      allow read: if isAdmin();
+    }
+
+    match /bookings/{id} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn();
+      allow update: if isSignedIn();
+    }
+
+    match /newsletter_subscriptions/{id} {
+      allow read: if isAdmin();
+      allow create: if true;
+    }
+
+    match /notifications/{id} {
+      allow read, write: if isSignedIn() &&
+        resource.data.userId == request.auth.uid;
+      allow create: if isSignedIn();
+    }
+
+    match /adventure_progress/{userId} {
+      allow read, write: if isSignedIn() && request.auth.uid == userId;
+      allow read: if isAdmin();
+    }
+
+    match /adventure_codes/{id} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+
+    match /audit_logs/{id} {
+      allow read: if isAdmin();
+      allow create: if isSignedIn();
+    }
+
+    match /content_overrides/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+  }
+}
